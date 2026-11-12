@@ -27,6 +27,14 @@
   <a class="btn btn-brand mobile-cta" href="#demo">Book a Demo</a>
 </nav>
 <div class="menu-backdrop" id="menuBackdrop"></div>
+<!-- Full-bleed hero background art. These sit outside .page (which is a fixed 1440px
+     canvas, clipped with overflow:hidden) so the gradient/photo/clouds reach the true
+     screen edges on any viewport width, instead of stopping at the canvas edge and
+     leaving plain white margins on wide monitors. -->
+<div class="hero-bg" aria-hidden="true"><img src="assets/hero-bg.png" alt=""></div>
+<div class="hero-gradient" aria-hidden="true"></div>
+<div class="hero-clouds" aria-hidden="true"><img src="assets/clouds.png" alt=""></div>
+
 <div class="page" id="page">
 
   <!-- ===================== HERO ===================== -->
@@ -41,7 +49,6 @@
   </div>
 
   <section class="hero-shadow">
-    <div class="hero-bg" aria-hidden="true"><img src="assets/hero-bg.png" alt=""></div>
     <h1 class="hero-title">Make travel easy<br>even for one-time users.</h1>
     <a class="btn btn-dark hero-cta" href="#demo">Travel with us</a>
   </section>
@@ -93,8 +100,6 @@
   </div>
 
   <div class="marker marker-lg m-left" aria-hidden="true"><img class="marker-avatar" src="assets/avatar.png" alt=""></div>
-  <div class="hero-gradient" aria-hidden="true"></div>
-  <div class="hero-clouds" aria-hidden="true"><img src="assets/clouds.png" alt=""></div>
 
   <!-- ===================== ABOUT / QUOTE ===================== -->
   <h2 class="crafted" id="about">Crafted by <em>travel, tech,</em> and <em>product pros</em> so your focus stays on journeys, not spreadsheets.</h2>

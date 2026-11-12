@@ -185,8 +185,8 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   100% { transform: scale(1.9); opacity: 0; }
 }
 @keyframes cloudDrift {
-  from { transform: translateX(0); }
-  to { transform: translateX(-28px); }
+  from { transform: translateX(0) scale(1.015); }
+  to { transform: translateX(-34px) scale(1.015); }
 }
 
 /* ------------------------------------------------------------
@@ -254,9 +254,16 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .m-left { left: 132.31px; top: 398.48px; width: 53.04px; height: 53.04px; --rot: 54.74deg; --float-delay: 1.95s; box-shadow: 11.37px 11.37px 5.05px 0 rgba(0, 0, 0, 0.25); }
 .m-left .marker-avatar { width: 41.67px; height: 41.67px; transform: translate(calc(-50% - 0.64px), calc(-50% + 0.63px)) rotate(-64.38deg); }
 
-.hero-shadow { left: 0; top: 0; width: 1440px; height: 1046px; opacity: 0.75; mix-blend-mode: darken; }
-.hero-bg { position: absolute; left: 0; top: 0; width: 1440px; height: 1033px; overflow: hidden; pointer-events: none; }
-.hero-bg img { width: 1440px; height: 1200px; }
+.hero-shadow { left: 0; top: 0; width: 1440px; height: 1046px; pointer-events: none; }
+.hero-shadow > * { pointer-events: auto; }
+/* full-bleed: positioned relative to the viewport (not the 1440px canvas), so it reaches
+   the true left/right screen edges on monitors wider than the design canvas */
+.hero-bg {
+  position: absolute; left: 0; right: 0; top: 0; height: 1033px;
+  overflow: hidden; pointer-events: none;
+  opacity: 0.75; mix-blend-mode: darken; /* carried over from the Figma "Section - Shadow" layer */
+}
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; }
 .hero-title {
   position: absolute; left: 228px; top: 302px; width: 984px;
   font-weight: 600; font-size: 56px; line-height: 60px; letter-spacing: -1.12px;
@@ -308,9 +315,10 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .award-rule { left: 51px; top: 51.45px; width: 20.39px; height: 2.11px; background: var(--ink); }
 .award-t4 { left: 52.3px; top: 86.43px; width: 16.25px; height: 13.57px; font-size: 10.56px; letter-spacing: 0.211px; }
 
-.hero-gradient { left: 0; top: 630px; width: 1440px; height: 423px; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 61.803%, #fff 100%); pointer-events: none; }
-.hero-clouds { left: -45px; top: 675px; width: 1518px; height: 772px; pointer-events: none; overflow: hidden; }
-.hero-clouds img { width: 1518px; height: 772px; animation: cloudDrift 24s ease-in-out infinite alternate; }
+.hero-gradient { position: absolute; left: 0; right: 0; top: 630px; height: 423px; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 61.803%, #fff 100%); pointer-events: none; }
+/* bleeds 40px past each screen edge so the drift below never reveals a seam */
+.hero-clouds { position: absolute; left: -40px; right: -40px; top: 675px; height: 772px; pointer-events: none; overflow: hidden; }
+.hero-clouds img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: cloudDrift 34s ease-in-out infinite alternate; }
 
 /* ------------------------------------------------------------
    ABOUT: headline + pinned quote card
@@ -928,7 +936,7 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
     mix-blend-mode: normal; opacity: 1;
     background: linear-gradient(180deg, #f2f4fb 0%, #ffffff 100%);
     display: flex; flex-direction: column; align-items: center;
-    padding: 40px 20px 32px; border-radius: 0 0 32px 32px;
+    padding: 40px 20px 32px; border-radius: 0;
   }
   .hero-bg { display: none; }
   .hero-title {
@@ -977,18 +985,22 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 
   /* ---------- "who can use the solution" dark card ---------- */
   .dark {
-    width: 100% !important; height: auto !important;
+    width: 100% !important; height: auto !important; border-radius: 0;
     display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start;
-    gap: 10px; padding: 44px 20px 32px;
+    gap: 8px; padding: 44px 20px 32px; overflow: visible;
   }
   .dark-caption, .dark-title { position: static !important; width: 100% !important; height: auto !important; flex: 0 0 100%; }
   .dark-caption { order: -2; }
   .dark-title { order: -1; font-size: 24px; line-height: 1.3; margin: 2px 0 18px; }
   .pill {
     position: static !important; transform: none !important;
-    width: auto !important; height: 44px; padding: 0 18px !important; font-size: 15px; margin: 0;
+    width: auto !important; max-width: 100%; height: auto; min-height: 40px;
+    padding: 8px 14px !important; font-size: 14px; gap: 8px; margin: 0;
+    white-space: normal !important; /* safety net: a too-long label wraps to 2 lines instead of clipping past the screen edge */
+    text-align: center;
   }
-  .pill-brand { padding: 0 16px !important; }
+  .pill img { width: 20px !important; height: 20px !important; }
+  .pill-brand { padding: 8px 12px !important; }
   .dark.is-entered .pill { transform: none !important; }
 
   /* ---------- meet Emmi ---------- */
@@ -1046,13 +1058,13 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   .tcard-photo { width: 100% !important; height: auto !important; aspect-ratio: 388 / 409; }
 
   /* ---------- CTA ---------- */
-  .cta { width: 100% !important; height: auto !important; padding: 48px 24px; }
+  .cta { width: 100% !important; height: auto !important; padding: 48px 24px; border-radius: 0; }
   .cta-content { position: static !important; width: 100% !important; display: flex; flex-direction: column; align-items: center; gap: 28px; }
   .cta-text h2 { font-size: 28px; line-height: 1.25; white-space: normal; width: 100%; height: auto; }
   .cta-text p { font-size: 15px; line-height: 1.5; white-space: normal; }
 
   /* ---------- footer ---------- */
-  .footer { width: 100% !important; height: auto !important; padding: 40px 20px 28px; border-radius: 24px; }
+  .footer { width: 100% !important; height: auto !important; padding: 40px 20px 28px; border-radius: 0; }
   .footer-brand { position: static !important; width: 100% !important; }
   .footer-cols { position: static !important; width: 100% !important; flex-direction: column; gap: 28px; margin-top: 28px; }
   .fcol, .fcol-explore, .fcol-legal, .fcol-contact { width: 100% !important; }
