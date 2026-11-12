@@ -185,8 +185,14 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   100% { transform: scale(1.9); opacity: 0; }
 }
 @keyframes cloudDrift {
-  from { transform: translateX(0) scale(1.015); }
-  to { transform: translateX(-34px) scale(1.015); }
+  0%   { transform: translate(0, 0) scale(1.08); }
+  50%  { transform: translate(-130px, -22px) scale(1.14); }
+  100% { transform: translate(-260px, 0) scale(1.08); }
+}
+@keyframes cloudDrift2 {
+  0%   { transform: translate(60px, 10px) scale(1.22); }
+  50%  { transform: translate(-90px, -14px) scale(1.3); }
+  100% { transform: translate(-220px, 16px) scale(1.22); }
 }
 
 /* ------------------------------------------------------------
@@ -317,8 +323,19 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 
 .hero-gradient { position: absolute; left: 0; right: 0; top: 630px; height: 423px; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 61.803%, #fff 100%); pointer-events: none; }
 /* bleeds 40px past each screen edge so the drift below never reveals a seam */
-.hero-clouds { position: absolute; left: -40px; right: -40px; top: 675px; height: 772px; pointer-events: none; overflow: hidden; }
-.hero-clouds img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: cloudDrift 34s ease-in-out infinite alternate; }
+.hero-clouds { position: absolute; left: -200px; right: -200px; top: 675px; height: 772px; pointer-events: none; overflow: hidden; }
+.hero-clouds img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: cloudDrift 18s ease-in-out infinite alternate; will-change: transform; }
+/* a second, faster, dimmer cloud layer crossing the first at a different speed —
+   the source photo is a soft, low-contrast texture, so one layer shifting on its
+   own reads as barely-there; two layers drifting past each other at different
+   rates is what actually registers as "moving clouds" */
+.hero-clouds::after {
+  content: ""; position: absolute; inset: 0;
+  background: url('assets/clouds.png') center / cover no-repeat;
+  opacity: 0.5;
+  animation: cloudDrift2 11s ease-in-out infinite alternate;
+  will-change: transform;
+}
 
 /* ------------------------------------------------------------
    ABOUT: headline + pinned quote card
@@ -1078,7 +1095,7 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .anim, .pill, .quote-er, .tcard, .cta-plane, .cta-star, .cta-btn, .dark-caption, .dark-title { transition-duration: 0.01ms !important; }
-  .marker, .marker::before, .hero-title, .hero-cta, .hero-sub, .award, .route, .hero-clouds img {
+  .marker, .marker::before, .hero-title, .hero-cta, .hero-sub, .award, .route, .hero-clouds img, .hero-clouds::after {
     animation: none !important;
   }
   .marker { --float: 0px; }
