@@ -1,0 +1,22 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="94.4094" height="90.8231" viewBox="0 0 94.4094 90.8231" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Star 7" filter="url(#filter0_d_0_49)">
+<use xlink:href="#stroke0_0_49" fill="#CAD1FE"/>
+<mask id="stroke1_0_49" fill="white">
+<use xlink:href="#stroke0_0_49"/>
+</mask>
+<path d="M54.2047 0L57.6164 26.6583L73.026 4.63903L63.6582 29.8292L87.5355 17.4934L67.5343 35.4448L94.4094 35.6183L68.3568 42.2184L92.0729 54.8615L65.9372 48.5983L81.0612 70.8147L60.8298 53.1231L63.897 79.8231L54.2047 54.756L44.5124 79.8231L47.5796 53.1231L27.3482 70.8147L42.4722 48.5983L16.3366 54.8615L40.0527 42.2184L14 35.6183L40.8751 35.4448L20.8739 17.4934L44.7512 29.8292L35.3834 4.63903L50.793 26.6583L54.2047 0Z" stroke-width="2" stroke="white" mask="url(#stroke1_0_49)"/>
+</g>
+<defs>
+<filter id="filter0_d_0_49" x="0" y="0" width="94.4094" height="90.8231" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-11" dy="8"/>
+<feGaussianBlur stdDeviation="1.5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.94 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_49"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_49" result="shape"/>
+</filter>
+<path id="stroke0_0_49" d="M54.2047 0L57.6164 26.6583L73.026 4.63903L63.6582 29.8292L87.5355 17.4934L67.5343 35.4448L94.4094 35.6183L68.3568 42.2184L92.0729 54.8615L65.9372 48.5983L81.0612 70.8147L60.8298 53.1231L63.897 79.8231L54.2047 54.756L44.5124 79.8231L47.5796 53.1231L27.3482 70.8147L42.4722 48.5983L16.3366 54.8615L40.0527 42.2184L14 35.6183L40.8751 35.4448L20.8739 17.4934L44.7512 29.8292L35.3834 4.63903L50.793 26.6583L54.2047 0Z"/>
+</defs>
+</svg>
