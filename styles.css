@@ -211,14 +211,18 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 }
 .route-2 { --route-o: 0.7; }
 .route-path, .route-blur { position: absolute; }
+.route-path svg, .route-blur svg { display: block; }
+
+/* The shadow line is the exact same path geometry as the colored line above it —
+   not a separately-cropped "blur" image asset (that asset's own crop didn't track
+   the curve correctly) — just re-colored, blurred, and nudged a few px in screen
+   space, the same way a drop-shadow duplicate is normally built. */
 .r1-path { left: 785.32px; top: 273.94px; width: 562.09px; height: 583.74px; transform: rotate(-18.59deg); }
-.r1-path img { width: 562.09px; height: 583.74px; }
-.r1-blur { left: 759.04px; top: 194.76px; width: 561.32px; height: 581.42px; transform: rotate(-18.59deg); opacity: 0.3; filter: blur(1.546px); overflow: hidden; }
-.r1-blur img { position: absolute; left: 1.86px; top: 181.45px; width: 557.18px; height: 218.29px; }
+.r1-blur { left: 790.32px; top: 280.94px; width: 562.09px; height: 583.74px; transform: rotate(-18.59deg); filter: blur(1.4px); }
 .r2-path { left: 110.7px; top: 332.29px; width: 588.67px; height: 611.35px; transform: rotate(61.69deg); }
-.r2-path img { width: 588.67px; height: 611.35px; }
-.r2-blur { left: 191.32px; top: 291.2px; width: 587.86px; height: 608.92px; transform: rotate(61.69deg); opacity: 0.3; filter: blur(1.62px); overflow: hidden; }
-.r2-blur img { position: absolute; left: 1.95px; top: 190px; width: 583.53px; height: 228.61px; }
+.r2-blur { left: 115.7px; top: 339.29px; width: 588.67px; height: 611.35px; transform: rotate(61.69deg); filter: blur(1.4px); }
+.route-blur svg path { stroke: #c1c7d6; }
+.route-blur { opacity: 0.8; }
 
 @property --float {
   syntax: '<length>';
