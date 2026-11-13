@@ -86,7 +86,19 @@ em { font-style: normal; }
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
+  transition: filter 0.2s ease, box-shadow 0.25s ease;
 }
+/* .hero-cta carries its own entrance animation on `transform` (see heroRise) — a
+   filled CSS animation out-prioritizes any later :hover/:active transform, so its
+   press feedback uses filter/shadow only, same as every other .btn. Buttons without
+   a competing transform animation (nav + footer CTAs) get the fuller lift below. */
+.btn:hover { filter: brightness(1.07); }
+.btn:active { filter: brightness(0.94); }
+.btn-brand, .btn-dark:not(.hero-cta) {
+  transition: filter 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--ease-slow);
+}
+.btn-brand:hover, .btn-dark:not(.hero-cta):hover { transform: translateY(-2px); }
+.btn-brand:active, .btn-dark:not(.hero-cta):active { transform: translateY(0) scale(0.96); }
 .btn-dark {
   background: #000;
   border: 1px solid #adadad;
@@ -295,14 +307,21 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   box-shadow: 0 4px 22.3px 0 rgba(0, 0, 0, 0.11);
   z-index: 5;
 }
-.logo img { width: 127px; height: 28px; }
+.logo img { width: 127px; height: 28px; transition: transform 0.25s var(--ease-slow); }
+.logo:hover img { transform: scale(1.06) rotate(-2deg); }
 .nav {
   display: flex; align-items: center; gap: 32px;
   font-weight: 532; font-size: 16px; line-height: 24px; letter-spacing: 0.064px;
   color: var(--grey-400); font-feature-settings: "lnum" 1, "tnum" 1;
 }
-.nav a { transition: color 0.25s ease; }
+.nav a { position: relative; transition: color 0.25s ease; padding-bottom: 4px; }
 .nav a.is-active, .nav a:hover { color: rgba(0, 0, 0, 0.9); }
+.nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+  background: var(--brand); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-slow);
+}
+.nav a:hover::after, .nav a.is-active::after { transform: scaleX(1); }
 .topbar .btn-brand { width: 156px; margin-left: auto; }
 
 .awards { left: 576px; top: 166px; width: 288.67px; height: 100px; display: flex; gap: 48.01px; }
@@ -323,6 +342,8 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .award-t2 { left: 46.4px; top: 13.48px; width: 32px; height: 26.95px; font-size: 21.12px; letter-spacing: 0.422px; }
 .award-t3 { left: 30.4px; top: 35.67px; width: 64px; height: 16.65px; font-size: 12.069px; letter-spacing: 0.241px; }
 .award-rule { left: 51px; top: 51.45px; width: 20.39px; height: 2.11px; background: var(--ink); }
+.award { transition: filter 0.25s ease; }
+.award:hover { filter: drop-shadow(0 6px 14px rgba(75, 72, 230, 0.25)) brightness(1.03); }
 .award-t4 { left: 52.3px; top: 86.43px; width: 16.25px; height: 13.57px; font-size: 10.56px; letter-spacing: 0.211px; }
 
 .hero-gradient { position: absolute; left: 0; right: 0; top: 630px; height: 423px; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 61.803%, #fff 100%); pointer-events: none; }
@@ -380,6 +401,8 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .quote-author-text span { font-weight: 500; font-size: 18px; line-height: 28px; white-space: nowrap; }
 .quote-g { position: relative; width: 64px; height: 64px; border-radius: 50%; background: #fff; overflow: hidden; }
 .quote-g img { position: absolute; left: -1.3%; top: 17.49%; width: 100.63%; height: 67.08%; }
+.quote-g { transition: transform 0.3s var(--ease-slow); }
+.quote-card:hover .quote-g { transform: rotate(10deg) scale(1.08); }
 .quote-pin { position: absolute; left: 334.1px; top: 0; width: 127px; height: 131px; overflow: hidden; }
 .quote-pin img { position: absolute; left: -0.05%; top: -0.25%; width: 137.89%; height: 168.7%; }
 
@@ -411,13 +434,16 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   background: var(--brand-50); border-radius: 16px; padding: 24px;
   display: flex; gap: 20px; align-items: flex-start; overflow: hidden;
 }
-.benefit-icon { position: relative; flex: none; width: 32px; height: 32px; border-radius: 8px; overflow: hidden; }
+.benefit-icon { position: relative; flex: none; width: 32px; height: 32px; border-radius: 8px; overflow: hidden; transition: transform 0.3s var(--ease-slow); }
 .benefit-icon img { position: absolute; left: 4px; top: 4px; width: 24px; height: 24px; }
 .benefit-icon.tmc img { left: 5.15px; top: 7px; width: 22.52px; height: 17.72px; transform: rotate(180deg) scaleY(-1); }
 .benefit-text { flex: 1 0 0; min-width: 1px; display: flex; flex-direction: column; gap: 8px; }
 .benefit-text.w290 { flex: none; width: 290px; }
 .benefit-text h3 { font-weight: 600; font-size: 20px; line-height: 24px; letter-spacing: -0.12px; color: #333b52; white-space: nowrap; }
 .benefit-text p { font-size: 16px; line-height: 24px; letter-spacing: 0.064px; color: var(--text-secondary); font-feature-settings: "lnum" 1, "tnum" 1; }
+.benefit { transition: transform 0.3s var(--ease-slow), box-shadow 0.3s ease; }
+.benefit:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(59, 60, 94, 0.12); }
+.benefit:hover .benefit-icon { transform: scale(1.12) rotate(-6deg); }
 
 /* ------------------------------------------------------------
    CORE FEATURES
@@ -431,11 +457,14 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px;
   display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
 }
-.feature-icon { position: relative; width: 83px; height: 83px; border-radius: 50%; background: var(--brand-50); overflow: hidden; }
+.feature-icon { position: relative; width: 83px; height: 83px; border-radius: 50%; background: var(--brand-50); overflow: hidden; transition: transform 0.3s var(--ease-slow), background 0.3s ease; }
 .feature-icon img { position: absolute; left: 50%; top: 50%; width: 42px; height: 42px; transform: translate(calc(-50% - 0.41px), calc(-50% - 0.41px)); }
 .feature-text { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 .feature-text h3 { font-weight: 600; font-size: 25px; line-height: 32px; letter-spacing: -0.15px; color: #333b52; }
 .feature-text p { font-size: 16px; line-height: 24px; letter-spacing: 0.064px; color: var(--text-secondary); font-feature-settings: "lnum" 1, "tnum" 1; }
+.feature { transition: transform 0.3s var(--ease-slow), box-shadow 0.3s ease, border-color 0.3s ease; }
+.feature:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(59, 60, 94, 0.12); border-color: var(--brand-400); }
+.feature:hover .feature-icon { transform: scale(1.1); background: var(--brand-100); }
 
 /* ------------------------------------------------------------
    WHO CAN USE THE SOLUTION (dark card, pills drop in on mouse enter)
@@ -839,7 +868,8 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .tcard-text h3 { font-weight: 600; font-size: 24px; line-height: 30px; color: #313144; }
 .tcard-text span { font-weight: 532; font-size: 16px; line-height: 24px; letter-spacing: 0.064px; color: var(--text-muted); font-feature-settings: "lnum" 1, "tnum" 1; }
 .tcard-photo { width: 388px; height: 409px; border-radius: 12px; overflow: hidden; background: #e6ecff; flex: none; }
-.tcard-photo img { width: 100%; height: 100%; object-fit: cover; }
+.tcard-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-slow); }
+.tcard:hover .tcard-photo img { transform: scale(1.06); }
 .tcard-pin { position: absolute; }
 .tcard-greg .tcard-pin { left: 169px; top: -22px; width: 114.12px; height: 148px; }
 .tcard-greg .tcard-pin img { width: 100%; height: 100%; object-fit: cover; }
@@ -891,14 +921,15 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .fcol-legal { width: 128px; }
 .fcol-contact { width: 196px; }
 .flinks { display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 16px; line-height: 24px; letter-spacing: 0.064px; color: var(--text-secondary); }
-.flinks a { transition: color 0.2s ease; }
-.flinks a:hover { color: var(--ink); }
+.flinks a { display: inline-block; transition: color 0.2s ease, transform 0.2s var(--ease-slow); }
+.flinks a:hover { color: var(--ink); transform: translateX(4px); }
 .fgroup { display: flex; flex-direction: column; gap: 24px; }
 .footer-brand { position: absolute; left: 35.6px; top: 121.4px; width: 248px; display: flex; flex-direction: column; gap: 12px; }
 .footer-brand img { width: 177.64px; height: 39.2px; }
 .footer-brand p { font-size: 14px; line-height: 22px; color: #52525b; }
 .footer-social { position: absolute; left: 35.6px; top: 250.6px; display: flex; gap: 12px; }
-.footer-social img { width: 28px; height: 28px; }
+.footer-social img { width: 28px; height: 28px; transition: transform 0.3s var(--ease-slow), filter 0.3s ease; }
+.footer-social a:hover img { transform: scale(1.18) rotate(-8deg); filter: drop-shadow(0 4px 8px rgba(75, 72, 230, 0.3)); }
 
 /* paper clips over the CTA / footer seam */
 .clip { position: absolute; background: #fff; border-radius: 31.25px; }
@@ -908,6 +939,43 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
 .clip-r-outer { left: 1195.24px; }
 .clip-l-inner { left: 181.44px; }
 .clip-r-inner { left: 1201.96px; }
+
+/* ------------------------------------------------------------
+   SCROLL REVEAL + scroll progress bar.
+   A generic "fade up into place" for every section that doesn't already
+   have its own Figma-sourced entrance animation, triggered the first time
+   each element crosses into the viewport (see main.js). Cards sharing a
+   row/grid stagger slightly via transition-delay.
+   Elements that already carry their own resting `transform` (team cards'
+   tilt, the dark card's pills) use an opacity-only reveal so this doesn't
+   fight with that transform.
+   ------------------------------------------------------------ */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-slow), transform 0.7s var(--ease-slow);
+}
+.reveal-up.in-view { opacity: 1; transform: none; }
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-slow);
+}
+.reveal-fade.in-view { opacity: 1; }
+
+.benefit-row .benefit:nth-child(2), .feature-row .feature:nth-child(2) { transition-delay: 0.08s; }
+.benefit-row .benefit:nth-child(3), .feature-row .feature:nth-child(3) { transition-delay: 0.16s; }
+.feature-row .feature:nth-child(4) { transition-delay: 0.24s; }
+.tcard-vishal { transition-delay: 0.12s; }
+.inv-avs .inv-av { transition-delay: calc(var(--i, 0) * 0.05s); }
+
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 80;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-400) 100%);
+  transition: width 0.1s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { transition: none; }
+}
 
 /* ------------------------------------------------------------
    RESPONSIVE: real flow layout below 900px.
@@ -1106,4 +1174,5 @@ body.menu-open .mobile-menu { transform: translateY(0); opacity: 1; pointer-even
   .hero-title, .hero-cta, .hero-sub, .award { opacity: 1; transform: none; }
   .route { opacity: 1; }
   .route-2 { opacity: 0.7; }
+  .reveal-up, .reveal-fade { transition: none !important; opacity: 1 !important; transform: none !important; }
 }

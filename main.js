@@ -2,10 +2,16 @@
  * 1. Scale the fixed 1440px design canvas to narrower viewports (tablet/desktop only —
  *    below the mobile breakpoint the canvas switches to a real flow layout in CSS).
  * 2. Fire the one-way "Mouse enter → Smart animate" interactions from the Figma prototype
- *    (quote card swing, "Travel we provide to" pills dropping in).
+ *    (quote card swing, "Travel we provide to" pills dropping in) the first time each
+ *    block scrolls into view — not just on hover, so scrolling itself feels alive.
  *    Hover interactions ("While hovering") are pure CSS :hover.
  * 3. Keep the active nav link in sync with the section in view (desktop nav + mobile menu).
  * 4. Hamburger menu: open/close, backdrop + Escape + link-click to close, body scroll lock.
+ * 5. Generic scroll-reveal for every .reveal-up/.reveal-fade section (benefit/feature
+ *    cards, headings, team cards, CTA, footer) — fades/slides in once, on first view.
+ * 6. Scroll progress bar across the top of the page.
+ * 7. "Magnetic" pointer-follow nudge on the two primary CTA buttons (hover-capable
+ *    pointers only).
  */
 (function () {
   'use strict';
@@ -33,16 +39,19 @@
       target.classList.add(cls);
     }
     if (reduce) { go(); return; }
+    // Hovering/tapping before it's scrolled fully into view still plays it early.
     trigger.addEventListener('mouseenter', go, { once: true });
     trigger.addEventListener('touchstart', go, { once: true, passive: true });
-    // Devices without a pointer that can hover: play when the block is in view.
-    if (!canHover && 'IntersectionObserver' in window) {
+    // Primary trigger, for every pointer type: play the first time it's in view.
+    if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) { go(); io.disconnect(); }
         });
-      }, { threshold: 0.55 });
+      }, { threshold: 0.4 });
       io.observe(trigger);
+    } else {
+      go();
     }
   }
 
@@ -103,6 +112,70 @@
     // never leave the menu stuck open underneath the now-hidden hamburger.
     window.addEventListener('resize', function () {
       if (window.innerWidth > MOBILE_BP) closeMenu();
+    });
+  }
+
+  /* ---------- 5. generic scroll reveal ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal-up, .reveal-fade'));
+  if (reduce) {
+    revealEls.forEach(function (el) { el.classList.add('in-view'); });
+  } else if ('IntersectionObserver' in window && revealEls.length) {
+    var io3 = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io3.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { io3.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in-view'); });
+  }
+
+  /* ---------- 6. scroll progress bar ---------- */
+  var progressBar = document.getElementById('scrollProgress');
+  if (progressBar) {
+    var tickingProgress = false;
+    function updateProgress() {
+      tickingProgress = false;
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+      progressBar.style.width = pct.toFixed(2) + '%';
+    }
+    function onScrollProgress() {
+      if (!tickingProgress) {
+        tickingProgress = true;
+        window.requestAnimationFrame(updateProgress);
+      }
+    }
+    updateProgress();
+    window.addEventListener('scroll', onScrollProgress, { passive: true });
+    window.addEventListener('resize', onScrollProgress);
+  }
+
+  /* ---------- 7. magnetic CTA buttons (hover-capable pointers only) ---------- */
+  if (canHover && !reduce) {
+    var magnets = Array.prototype.slice.call(document.querySelectorAll('.topbar .btn-brand, .cta-btn'));
+    magnets.forEach(function (el) {
+      var dx = 0, dy = 0, pressed = false;
+      function render() {
+        el.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + (pressed ? 0.94 : 1) + ')';
+      }
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        dx = (e.clientX - (r.left + r.width / 2)) * 0.25;
+        dy = (e.clientY - (r.top + r.height / 2)) * 0.3;
+        render();
+      });
+      el.addEventListener('mouseleave', function () {
+        dx = 0; dy = 0; pressed = false;
+        el.style.transform = '';
+      });
+      el.addEventListener('mousedown', function () { pressed = true; render(); });
+      el.addEventListener('mouseup', function () { pressed = false; render(); });
+      el.style.transition = 'transform 0.2s var(--ease-slow, ease)';
     });
   }
 })();
